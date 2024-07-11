@@ -7,13 +7,17 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/formatters";
 import { Button } from "@/components/ui/button";
-import { addProduct } from "../../_actions/products";
+import { addProduct, updateProduct } from "../../_actions/products";
 import { useFormState, useFormStatus } from "react-dom";
 import { Product } from "@prisma/client";
 import Image from "next/image";
 
 export function ProductForm({ product }: { product?: Product | null }) {
-  const [error, formAction] = useFormState(addProduct, {});
+  const [error, formAction] = useFormState(
+    product == null ? addProduct : updateProduct.bind(null, product.id),
+    {}
+  );
+
   const [priceInCents, setPriceInCents] = useState<number | undefined>(
     product?.priceInCents
   );
