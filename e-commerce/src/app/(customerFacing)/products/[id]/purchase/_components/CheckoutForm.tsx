@@ -89,7 +89,7 @@ function Form({
 
     setIsLoading(true);
 
-    // check for exixting order
+    // Todo check for exixting order
     // userOrderExists(email, productId);
 
     stripe
