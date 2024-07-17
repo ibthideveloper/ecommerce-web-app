@@ -1,5 +1,6 @@
 "use client";
 
+import { userOrderExists } from "@/app/_actions/orders";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -82,7 +83,7 @@ function Form({
   const [errorMessage, setErrorMessage] = useState<string>();
   const [email, setEmail] = useState<string>();
 
-  function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (stripe == null || elements == null || email == null) return;
@@ -90,7 +91,15 @@ function Form({
     setIsLoading(true);
 
     // Todo check for exixting order
-    // userOrderExists(email, productId);
+    const orderExists = await userOrderExists(email, productId);
+
+    if (orderExists) {
+      setErrorMessage(
+        "You have already purchased the product . Try downloading it from My Orders"
+      );
+      setIsLoading(false);
+      return;
+    }
 
     stripe
       .confirmPayment({
